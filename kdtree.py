@@ -30,27 +30,42 @@ def build(data,depth=0):
 
     return node
 
-def search(node,query,best=None):
+def search(node, query, best=None):
     if node is None:
         return best
 
-    dist=euclidean_dist(node.vector,query)
+    dist = euclidean_dist(node.vector, query)
 
-    if best is None or dist<best[0]:
-        best=(dist,node.payload)
+    if best is None or dist < best[0]:
+        best = (dist, node.payload)
 
-    axis=node.axis
-    diff=query[axis]-node.vector[axis]
+    axis = node.axis
+    diff = query[axis] - node.vector[axis]
 
-    close=node.left if diff<=0 else node.right    
-    away=node.right if diff<=0 else node.left
+    if diff <= 0:
+        best = search(node.left, query, best)
+    else:
+        best = search(node.right, query, best)
 
-    best=search(close,query,best)
-
-    if abs(diff)<best[0]:
-        best=search(away,query,best)
+    if abs(diff) < best[0]:
+        if diff <= 0:
+            best = search(node.right, query, best)
+        else:
+            best = search(node.left, query, best)
 
     return best
+
+def insert(node,vector,payload,depth=0):
+    if node is None:
+        return KDnode(vector,payload)
+
+    axis = depth % len(vector)
+    if vector[axis]<node.vector[axis]:
+        node.left= insert(node.left,vector,payload,depth+1)
+    else:
+        node.right= insert(node.right,vector,payload,depth+1)
+
+    return node
 
 if __name__ == "__main__":
     data = [
@@ -62,6 +77,7 @@ if __name__ == "__main__":
     ]
 
     root = build(data)
-    query = [4, 3]
-    result = search(root, query)
-    print(f"Closest to {query}: {result[1]} (distance: {result[0]:.3f})")
+    
+    root = insert(root, [6, 5], "tiger")
+    result2 = search(root, [6, 4])
+    print(f"Closest to [6,4]: {result2[1]} (distance: {result2[0]:.3f})")
