@@ -8,7 +8,7 @@ def generator(n,dimensions):
     return build(data)
 
 def search_benchmark(n,dimensions=10,runs=10):
-    root=generator(n,dimensions=10)
+    root=generator(n,dimensions)
     query=[random.uniform(0,100) for i in range(dimensions)]
     
     time_lapses=[]
@@ -29,18 +29,8 @@ final_time_lapses=[search_benchmark(n) for n in sizes]
 plt.plot(sizes, final_time_lapses)
 plt.xlabel("number of stored vectors (N)")
 plt.ylabel("average search time (ms)")
+plt.title("PyVector KD-Tree search time vs dataset size")
 plt.grid(True, alpha=0.3)
 plt.savefig("benchmark.png")
 plt.show()
 
-"""
-plt.figure(figsize=(10, 6))
-plt.plot(sizes, final_time_lapses, marker='o', color='#1D9E75', linewidth=2)
-plt.xlabel("number of stored vectors (N)")
-plt.ylabel("average search time (ms)")
-plt.title("PyVector KD-Tree search time vs dataset size")
-plt.grid(True, alpha=0.3)
-plt.savefig("benchmark.png", dpi=150, bbox_inches='tight')
-plt.show()
-print("benchmark saved to benchmark.png")
-"""
