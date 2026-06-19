@@ -1,4 +1,4 @@
-# VecFind
+# VecFind - Lite
 
 A lightweight in-memory vector database and semantic search engine built from scratch in Python.
 
